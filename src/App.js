@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import Waldo from './Waldo';
+import Sidebar from './Sidebar';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -52,6 +53,7 @@ function App() {
   return (
     <div className="App">
       <Waldo />
+      <Sidebar />
     </div>
   );
 }
