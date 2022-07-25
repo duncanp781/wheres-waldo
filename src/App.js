@@ -31,6 +31,7 @@ function App() {
   const [userInfo, setUserInfo] = useState(null);
   const [selection, setSelection] = useState(null);
   const [guess, setGuess] = useState(null);
+  const [correct, setCorrect] = useState(null);
 
   async function addTime(name, time) {
     try {
@@ -46,18 +47,18 @@ function App() {
   }
 
   const answers = {
-    "Odlaw": [0.1955, 0.7434],
-    "Wenda": [0.2982, 0.7476],
-    "Waldo": [0.4224, 0.1931],
+    Odlaw: [0.1955, 0.7434],
+    Wenda: [0.2982, 0.7476],
+    Waldo: [0.4224, 0.1931],
     "Wizard Whitebeard": [0.6915, 0.0524],
-  }
+  };
 
   const getDist = (selection, guess) => {
     let [rightX, rightY] = answers[selection];
     let [guessX, guessY] = guess;
-    let dist = Math.sqrt((rightX - guessX)**2 + (rightY - guessY)**2)
-    console.log( dist < 0.05);
-  }
+    let dist = Math.sqrt((rightX - guessX) ** 2 + (rightY - guessY) ** 2);
+    return dist < 0.05;
+  };
 
   useEffect(() => {
     async function getInfo() {
@@ -78,13 +79,16 @@ function App() {
   };
 
   const submitGuess = () => {
-    getDist(selection, guess);
+    let correct = selection && guess && getDist(selection, guess);
+    if (correct){
+      setCorrect(selection);
+    }
   };
 
   return (
     <div className="App">
       <Waldo guess={handleGuess} />
-      <Sidebar select={handleSelection} guess={submitGuess} />
+      <Sidebar select={handleSelection} guess={submitGuess} addCorrect = {correct}/>
     </div>
   );
 }
