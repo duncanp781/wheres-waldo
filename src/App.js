@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Waldo from "./Waldo";
 import Sidebar from "./Sidebar";
+import './waldo-style.css'
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -10,6 +11,8 @@ import {
   addDoc,
   doc,
   getDoc,
+  query,
+  where
 } from "firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -46,15 +49,19 @@ function App() {
     }
   }
 
-  const answers = {
-    Odlaw: [0.1955, 0.7434],
-    Wenda: [0.2982, 0.7476],
-    Waldo: [0.4224, 0.1931],
-    "Wizard Whitebeard": [0.6915, 0.0524],
-  };
+  async function getAnswer(selection){
+    try{
+      const docRef = doc(db, "answers/answers");
+      const docSnap = await getDoc(docRef);
+      console.log('answer: ', docSnap.data()[selection]);
+      return docSnap.data()[selection];
+    } catch( e){
+      console.error('Failed to get answers with error', e);
+    }
+  }
 
-  const getDist = (selection, guess) => {
-    let [rightX, rightY] = answers[selection];
+  const getDist = (selection, guess, answer) => {
+    let [rightX, rightY] = answer
     let [guessX, guessY] = guess;
     let dist = Math.sqrt((rightX - guessX) ** 2 + (rightY - guessY) ** 2);
     return dist < 0.05;
@@ -78,8 +85,9 @@ function App() {
     guess && setGuess(guess);
   };
 
-  const submitGuess = () => {
-    let correct = selection && guess && getDist(selection, guess);
+  const submitGuess = async () => {
+    let answer = await getAnswer(selection);
+    let correct = selection && guess && getDist(selection, guess, answer);
     if (correct){
       setCorrect(selection);
     }

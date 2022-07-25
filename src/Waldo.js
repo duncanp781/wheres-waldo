@@ -1,6 +1,6 @@
 import React, {Component } from "react";
 import waldo from "./waldo-hard.jpeg";
-import "./waldo-style.css";
+
 
 class Waldo extends Component{
   constructor(props){

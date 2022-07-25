@@ -1,4 +1,4 @@
-import "./waldo-style.css";
+
 import waldo from "./waldo.webp";
 import wenda from "./wenda.webp";
 import whitebeard from "./whitebeard.webp";
