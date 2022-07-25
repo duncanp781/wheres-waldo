@@ -9,7 +9,23 @@ class Waldo extends Component{
     this.state = {
       clickCoords: null,
       circle: null,
+      rand: false,
     }
+
+
+  }
+
+  componentDidMount(){
+    window.addEventListener('resize', this.handleResize);
+    
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener('resize', this.handleResize);
+  }
+
+  handleResize = () => {
+    this.setState({rand: !this.state.rand});
   }
 
   handleClick = (e) => {
@@ -17,6 +33,7 @@ class Waldo extends Component{
     this.setState({
       clickCoords: coords,
     });
+    this.props.guess(coords);
   }
 
 
@@ -28,7 +45,6 @@ class Waldo extends Component{
   }
 
   reltoAbs(rel){
-    console.log(rel);
     let [relX, relY] = rel;
     let imgInfo = this.imgRef.current.getClientRects()[0];
     let [w,h] = [imgInfo.width, imgInfo.height];

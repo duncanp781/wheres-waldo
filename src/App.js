@@ -1,10 +1,16 @@
-import {useState, useEffect} from 'react';
-import Waldo from './Waldo';
-import Sidebar from './Sidebar';
+import { useState, useEffect } from "react";
+import Waldo from "./Waldo";
+import Sidebar from "./Sidebar";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, doc, getDoc} from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -13,51 +19,74 @@ const firebaseConfig = {
   projectId: "wheres-waldo-98219",
   storageBucket: "wheres-waldo-98219.appspot.com",
   messagingSenderId: "1063058259021",
-  appId: "1:1063058259021:web:854e0d47914d45e7d07004"
+  appId: "1:1063058259021:web:854e0d47914d45e7d07004",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-
 function App() {
   const [uid, setUid] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [selection, setSelection] = useState(null);
+  const [guess, setGuess] = useState(null);
 
-  async function addTime(name, time){
+  async function addTime(name, time) {
     try {
       const docRef = await addDoc(collection(db, "Times"), {
         time: time,
         name: name,
-      })
+      });
       console.log("Document written with ID: ", docRef.id);
       setUid(docRef.id);
-
-    }catch (e){
-      console.error('Error adding time: ', e);
+    } catch (e) {
+      console.error("Error adding time: ", e);
     }
   }
 
+  const answers = {
+    "Odlaw": [0.1955, 0.7434],
+    "Wenda": [0.2982, 0.7476],
+    "Waldo": [0.4224, 0.1931],
+    "Wizard Whitebeard": [0.6915, 0.0524],
+  }
+
+  const getDist = (selection, guess) => {
+    let [rightX, rightY] = answers[selection];
+    let [guessX, guessY] = guess;
+    let dist = Math.sqrt((rightX - guessX)**2 + (rightY - guessY)**2)
+    console.log( dist < 0.05);
+  }
+
   useEffect(() => {
-    async function getInfo(){
+    async function getInfo() {
       const docRef = doc(db, "Times/" + uid);
       const docsnap = await getDoc(docRef);
       console.log("Doc snap:", docsnap.data());
     }
 
     uid && getInfo();
-  
-  }, [uid])
+  }, [uid]);
+
+  const handleSelection = (name) => {
+    name && setSelection(name);
+  };
+
+  const handleGuess = (guess) => {
+    guess && setGuess(guess);
+  };
+
+  const submitGuess = () => {
+    getDist(selection, guess);
+  };
 
   return (
     <div className="App">
-      <Waldo />
-      <Sidebar />
+      <Waldo guess={handleGuess} />
+      <Sidebar select={handleSelection} guess={submitGuess} />
     </div>
   );
 }
-
-
 
 export default App;

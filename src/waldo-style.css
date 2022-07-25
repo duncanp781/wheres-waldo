@@ -15,12 +15,24 @@ body, html{
 .sidebar{
   position: absolute;
   height: 100vh;
-  width: 19vw;
+  width: 15vw;
   right: 0;
   top: 0;
   border: 2px dashed red;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .sidebar-img{
-  width: 3vw;
+  height: 6vh;
+}
+
+.char{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.char.selected{
+  background-color: green;
 }
