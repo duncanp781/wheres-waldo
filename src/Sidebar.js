@@ -1,4 +1,3 @@
-
 import waldo from "./waldo.webp";
 import wenda from "./wenda.webp";
 import whitebeard from "./whitebeard.webp";
@@ -8,6 +7,8 @@ import { useState, useEffect } from "react";
 const Sidebar = (props) => {
   const [selected, setSelected] = useState(null);
   const [correct, setCorrect] = useState(null);
+  const [stop, setStop] = useState(false);
+  const [time, setTime] = useState(0);
 
   useEffect(() => {
     if (props.addCorrect) {
@@ -24,12 +25,21 @@ const Sidebar = (props) => {
     }
   };
 
+
+  useEffect(() => {
+    if (correct && Object.keys(correct).length === 4){
+      props.win(time);
+      setStop(true);
+    }
+  }, [correct, props, time])
+
   useEffect(() => {
     props.select(selected);
   }, [selected, props]);
 
   return (
     <div className="sidebar">
+      <Timer stop = {stop} time = {time} setTime = {setTime}/>
       <Char
         img={waldo}
         charName={"Waldo"}
@@ -74,13 +84,31 @@ const Char = ({ img, charName, click, selected, correct }) => {
   };
   return (
     <div
-      className={`char ${select}` + (correct && correct[charName] ? "correct" : "")}
+      className={
+        `char ${select}` + (correct && correct[charName] ? "correct" : "")
+      }
       onClick={handleClick}
     >
       <img src={img} alt={charName} className="sidebar-img" />
       <span>{charName}</span>
     </div>
   );
+};
+
+const Timer = ({ stop, setTime, time }) => {
+
+
+  useEffect(() => {
+      let timer;
+      if(!stop && !timer){
+        timer = setInterval(() => setTime((time) => time + 1), 1000);
+      }else if (stop){
+        timer && clearInterval(timer);
+      }
+      return () => clearInterval(timer);
+  }, [stop, setTime, time]);
+
+  return <div>Time: {time} seconds</div>;
 };
 
 export default Sidebar;

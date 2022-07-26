@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Waldo from "./Waldo";
 import Sidebar from "./Sidebar";
-import './waldo-style.css'
+import "./waldo-style.css";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -11,8 +11,6 @@ import {
   addDoc,
   doc,
   getDoc,
-  query,
-  where
 } from "firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -49,19 +47,19 @@ function App() {
     }
   }
 
-  async function getAnswer(selection){
-    try{
+  async function getAnswer(selection) {
+    try {
       const docRef = doc(db, "answers/answers");
       const docSnap = await getDoc(docRef);
-      console.log('answer: ', docSnap.data()[selection]);
+      console.log("answer: ", docSnap.data()[selection]);
       return docSnap.data()[selection];
-    } catch( e){
-      console.error('Failed to get answers with error', e);
+    } catch (e) {
+      console.error("Failed to get answers with error", e);
     }
   }
 
   const getDist = (selection, guess, answer) => {
-    let [rightX, rightY] = answer
+    let [rightX, rightY] = answer;
     let [guessX, guessY] = guess;
     let dist = Math.sqrt((rightX - guessX) ** 2 + (rightY - guessY) ** 2);
     return dist < 0.05;
@@ -88,15 +86,24 @@ function App() {
   const submitGuess = async () => {
     let answer = await getAnswer(selection);
     let correct = selection && guess && getDist(selection, guess, answer);
-    if (correct){
+    if (correct) {
       setCorrect(selection);
     }
   };
 
+  const win = async (time) => {
+    console.log(time);
+  }
+
   return (
     <div className="App">
       <Waldo guess={handleGuess} />
-      <Sidebar select={handleSelection} guess={submitGuess} addCorrect = {correct}/>
+      <Sidebar
+        select={handleSelection}
+        guess={submitGuess}
+        addCorrect={correct}
+        win = {win}
+      />
     </div>
   );
 }
