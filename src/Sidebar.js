@@ -27,7 +27,7 @@ const Sidebar = (props) => {
 
 
   useEffect(() => {
-    if (correct && Object.keys(correct).length === 4){
+    if (correct && Object.keys(correct).length === 4 && !props.won){
       props.win(time);
       setStop(true);
     }

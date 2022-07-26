@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Waldo from "./Waldo";
 import Sidebar from "./Sidebar";
+import WinModal from './WinModal'
 import "./waldo-style.css";
 
 // Import the functions you need from the SDKs you need
@@ -33,6 +34,8 @@ function App() {
   const [selection, setSelection] = useState(null);
   const [guess, setGuess] = useState(null);
   const [correct, setCorrect] = useState(null);
+  const [won, setWon] = useState(false);
+  const [time, setTime] = useState(0);
 
   async function addTime(name, time) {
     try {
@@ -51,7 +54,6 @@ function App() {
     try {
       const docRef = doc(db, "answers/answers");
       const docSnap = await getDoc(docRef);
-      console.log("answer: ", docSnap.data()[selection]);
       return docSnap.data()[selection];
     } catch (e) {
       console.error("Failed to get answers with error", e);
@@ -92,8 +94,11 @@ function App() {
   };
 
   const win = async (time) => {
-    console.log(time);
-  }
+    if (!won) {
+      setWon(true);
+      setTime(time);
+    }
+  };
 
   return (
     <div className="App">
@@ -102,8 +107,10 @@ function App() {
         select={handleSelection}
         guess={submitGuess}
         addCorrect={correct}
-        win = {win}
+        win={win}
+        won={won}
       />
+      {won && <WinModal time = {time} addTime = {addTime} db = {db}/>}
     </div>
   );
 }

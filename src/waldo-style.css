@@ -40,3 +40,32 @@ body, html{
 .char.correct{
   background-color: green;
 }
+
+.modal-screen{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.219);
+}
+
+.modal-container{
+  position: relative;
+  top: 30%;
+  left: 30%;
+  width: 30%;
+  min-height: 30%;
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.close{
+  text-align: right;
+}
+
+.leaderboard-time{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
