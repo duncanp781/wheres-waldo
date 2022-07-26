@@ -1,6 +1,6 @@
 {
   "firestore": {
-    "rules": "y",
+    "rules": "firebase.rules",
     "indexes": "firestore.indexes.json"
   },
   "emulators": {
@@ -8,10 +8,25 @@
       "port": 5000
     },
     "hosting": {
-      "port": 8080
+      "port": 8080,
+      "public": "build"
     },
     "ui": {
       "enabled": true
     }
+  },
+  "hosting": {
+    "public": "build",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 }

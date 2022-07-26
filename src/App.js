@@ -29,8 +29,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 function App() {
-  const [uid, setUid] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
   const [selection, setSelection] = useState(null);
   const [guess, setGuess] = useState(null);
   const [correct, setCorrect] = useState(null);
@@ -43,8 +41,6 @@ function App() {
         time: time,
         name: name,
       });
-      console.log("Document written with ID: ", docRef.id);
-      setUid(docRef.id);
     } catch (e) {
       console.error("Error adding time: ", e);
     }
@@ -67,15 +63,6 @@ function App() {
     return dist < 0.05;
   };
 
-  useEffect(() => {
-    async function getInfo() {
-      const docRef = doc(db, "Times/" + uid);
-      const docsnap = await getDoc(docRef);
-      console.log("Doc snap:", docsnap.data());
-    }
-
-    uid && getInfo();
-  }, [uid]);
 
   const handleSelection = (name) => {
     name && setSelection(name);

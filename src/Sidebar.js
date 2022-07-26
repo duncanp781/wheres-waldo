@@ -39,6 +39,7 @@ const Sidebar = (props) => {
 
   return (
     <div className="sidebar">
+      <span>Click a character in the image when you have found it, and select below which character you have found!</span>
       <Timer stop = {stop} time = {time} setTime = {setTime}/>
       <Char
         img={waldo}

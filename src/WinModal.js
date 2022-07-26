@@ -50,7 +50,6 @@ const Leaderboard = ({ leaderboard }) => {
     <div className="leaderboard">
       <h3>Best Times:</h3>
       {leaderboard.map((entry) => {
-        console.log(entry);
         return (
           <div key = {uniqid()} className = 'leaderboard-time'>
             <span>{entry.name}</span>
